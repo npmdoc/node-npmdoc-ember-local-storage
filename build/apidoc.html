@@ -1,0 +1,216 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/funkensturm/ember-local-storage#readme"
+
+    >ember-local-storage (v1.3.6)</a>
+</h1>
+<h4>The addon provides an ember-data adapter and a storageFor computed property that persists the changes to localStorage or sessionStorage.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.ember-local-storage">module ember-local-storage</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ember-local-storage.included">
+            function <span class="apidocSignatureSpan">ember-local-storage.</span>included
+            <span class="apidocSignatureSpan">(app)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ember-local-storage.treeForAddon">
+            function <span class="apidocSignatureSpan">ember-local-storage.</span>treeForAddon
+            <span class="apidocSignatureSpan">(tree)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ember-local-storage.treeForApp">
+            function <span class="apidocSignatureSpan">ember-local-storage.</span>treeForApp
+            <span class="apidocSignatureSpan">(tree)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">string <span class="apidocSignatureSpan">ember-local-storage.</span>name</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.ember-local-storage" id="apidoc.module.ember-local-storage">module ember-local-storage</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.ember-local-storage.included" id="apidoc.element.ember-local-storage.included">
+        function <span class="apidocSignatureSpan">ember-local-storage.</span>included
+        <span class="apidocSignatureSpan">(app)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function included(app) {
+  // determine if ember-data is present
+  var checker = new VersionChecker(this);
+  var bowerDep = checker.for(&#x27;ember-data&#x27;, &#x27;bower&#x27;);
+  var npmDep = checker.for(&#x27;ember-data&#x27;, &#x27;npm&#x27;);
+
+  if (
+    (
+      bowerDep.version &#x26;&#x26; (
+        bowerDep.satisfies(&#x27;&#x3e;= 1.13.0&#x27;) ||
+        bowerDep.satisfies(&#x27;&#x3e;= 2.0.0&#x27;) ||
+        bowerDep.gt(&#x27;2.0.0&#x27;)
+      )
+    ) ||
+    (
+      npmDep.version  &#x26;&#x26; (
+        npmDep.satisfies(&#x27;&#x3e;= 1.13.0&#x27;) ||
+        npmDep.satisfies(&#x27;&#x3e;= 2.0.0&#x27;) ||
+        npmDep.gt(&#x27;2.0.0&#x27;)
+      )
+    )
+  ) {
+    this.hasEmberData = true;
+  }
+
+  // determin if saveAs and Blob should be imported
+  var projectConfig = this.project.config(app.env);
+
+  if (projectConfig) {
+    var options = projectConfig[&#x27;ember-local-storage&#x27;] || {};
+
+    if (options.fileExport &#x26;&#x26; this.hasEmberData) {
+      app.import(&#x27;vendor/save-as.js&#x27;);
+      app.import(app.bowerDirectory + &#x27;/blob-polyfill/Blob.js&#x27;);
+    }
+  }
+
+  this._super.included.apply(this, arguments);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ember-local-storage.treeForAddon" id="apidoc.element.ember-local-storage.treeForAddon">
+        function <span class="apidocSignatureSpan">ember-local-storage.</span>treeForAddon
+        <span class="apidocSignatureSpan">(tree)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">treeForAddon = function (tree) {
+  if (!this.hasEmberData) {
+    [
+      &#x27;adapters/adapter.js&#x27;,
+      &#x27;adapters/base.js&#x27;,
+      &#x27;adapters/local.js&#x27;,
+      &#x27;adapters/session.js&#x27;,
+      &#x27;initializers/local-storage-adapter.js&#x27;,
+      &#x27;mixins/adapters/import-export.js&#x27;,
+      &#x27;serializers/serializer.js&#x27;
+    ].forEach(function(file) {
+      tree = stew.rm(tree, file);
+    });
+  }
+
+  return this._super.treeForAddon.call(this, tree);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ember-local-storage.treeForApp" id="apidoc.element.ember-local-storage.treeForApp">
+        function <span class="apidocSignatureSpan">ember-local-storage.</span>treeForApp
+        <span class="apidocSignatureSpan">(tree)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">treeForApp = function (tree) {
+  if (!this.hasEmberData) {
+    [
+      &#x27;initializers/local-storage-adapter.js&#x27;
+    ].forEach(function(file) {
+      tree = stew.rm(tree, file);
+    });
+  }
+
+  return tree;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
